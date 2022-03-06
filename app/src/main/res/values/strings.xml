@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Task_5</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="atm">ATM</string>
+    <string name="filial">Filial</string>
+    <string name="infobox">Infobox</string>
+</resources>
