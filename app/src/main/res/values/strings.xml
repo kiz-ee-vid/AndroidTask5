@@ -4,4 +4,5 @@
     <string name="atm">ATM</string>
     <string name="filial">Filial</string>
     <string name="infobox">Infobox</string>
+    <string name="check_connection">Check internet connection</string>
 </resources>

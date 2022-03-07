@@ -1,7 +1,10 @@
 package com.example.task_5
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -34,8 +37,22 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         val homiel = LatLng(52.42416, 31.014281)
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(homiel, 13f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(homiel, 15f))
+        getMarkers()
+    }
+
+    private fun getMarkers() {
         CoroutineScope(Dispatchers.Default).launch {
+            while (!checkInternetConnection()) {
+                runOnUiThread {
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.check_connection),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                delay(6000)
+            }
             Single.zip(
                 BankApiImpl.getListOfBanks(),
                 BankApiImpl.getListOfFilials(),
@@ -87,6 +104,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                 )
         )
+    }
+
+    private fun checkInternetConnection(): Boolean {
+        val connection =
+            applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return connection.activeNetwork != null
     }
 
     companion object {
